@@ -1,9 +1,135 @@
-#content {
-  margin-left: auto;
-  margin-right: auto;
-  width: 650px;
+/*
+Todo: Set glowing border on bottom of upper half
+        - Hopefully will make transition to next half smoother
+
+*/
+
+html, body, h1 {
+  padding: 0;
+  margin: 0;
 }
 
-#greeting-container {
-  margin-top: 20px;
+/*
+UPPER HALF OF PAGE
+*/
+
+#intro {
+  background-color: red;
+  background-image: url("images/retrowave1.jpg");
+  background-attachment: fixed;
+  background-size: 100% 100%;
+  height: 100vh;
+  min-height: 600px;
+  min-width: 450px;
+  padding: 0 22%;
+  margin: auto;
+  box-shadow:
+    inset 0 -15px 15px -15px #08f,
+    inset 0 -20px 20px -20px #08f;
 }
+
+.filler {
+  height: 150px;
+}
+
+#banner {
+  /* Multiple shadows used to have stronger shadings at different
+  ranges, inset used to also make inner side shaded */
+  box-shadow:
+    0 0 .5rem #fff,
+    inset 0 0 .5rem #fff,
+    0 0 2rem #08f,
+    inset 0 0 2rem #08f,
+    0 0 4rem #08f,
+    inset 0 0 4rem #08f;
+
+  border-radius: 15px;
+  padding-top: 75px;
+  height: 225px;
+  min-width: 500px;
+  text-align: center;
+}
+
+#banner h1 {
+  font-size: 5rem;
+  color: #fff;
+  /* Multiple shadows used to have stronger shadings at different
+  ranges */
+  text-shadow:
+    -0.1rem -0.1rem .1rem #fff,
+    0.1rem 0.1rem .1rem #fff,
+    0 0 4rem #f40,
+    0 0 2rem #f40,
+    0 0 1rem #f40,
+    0 0 .5rem #f40;
+}
+
+#links li {
+  display: inline-block;
+  padding: 0 10px;
+}
+
+#links img {
+  width: 55px;
+  height: 55px;
+}
+
+/*
+END UPPER HALF OF PAGE
+*/
+
+/*
+LOWER HALF OF PAGE
+*/
+
+#content {
+  min-width: 450px;
+  padding: 2% 22%;
+  text-align: center;
+  background-color: #95aeff;
+}
+
+#pages {
+  margin: 0;
+  padding-bottom: 2%;
+  display: flex;
+  justify-content: center;
+}
+
+#pages li {
+  height: 40px;
+  width: 150px;
+  line-height: 40px;
+  border: 1px solid gray;
+  display: inline-block;
+  padding: 0 10px;
+}
+
+#left {
+  border-bottom-left-radius: 4px;
+  border-top-left-radius: 4px;
+}
+
+#right {
+  border-bottom-right-radius: 4px;
+  border-top-right-radius: 4px;
+}
+
+#selfie {
+  border-radius: 50%;
+  height: 300px;
+  width: 300px;
+}
+
+#aboutme {
+  width: 50%;
+  margin: auto;
+}
+
+#content p {
+  font-size: 25px;
+}
+
+/*
+END LOWER HALF OF PAGE
+*/
