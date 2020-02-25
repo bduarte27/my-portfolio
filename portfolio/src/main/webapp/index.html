@@ -2,17 +2,65 @@
 <html>
   <head>
     <meta charset="UTF-8">
-    <title>My Portfolio</title>
+    <title>Brian Duarte</title>
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
   <body>
+    <!-- intro section describes upper half of the page which is just the wallpaper with my name -->
+    <div id="intro">
+
+      <!-- This empty container just takes up space to help position the banner -->
+      <div class="filler">
+      </div>
+
+      <!-- Flashy area in center of initial page that has my name in the middle -->
+      <div id="banner">
+        <h1>Brian Duarte</h1>
+
+        <!-- Horizontal list with links to my personal pages -->
+        <ul id="links">
+          <li>
+            <a href="mailto:duartebrian27@gmail.com">
+            <img src="images/gmail.png" alt="mail">
+            <a/>
+          </li>
+          <li>
+            <a href="https://github.com/bduarte27">
+            <img src="images/github.png" alt="github">
+            </a>
+          </li>
+          <li>
+            <a href="https://www.facebook.com/brian.duarte.1865">
+            <img src="images/facebook.png" alt="facebook">
+            </a>
+          </li>
+        </ul>
+      </div>
+    </div>
+    <!-- End of upper half of webpage -->
+
+    <!-- Start of lower half of webpage -->
     <div id="content">
-      <h1>My Portfolio</h1>
-      <p>This is my portfolio.</p>
+
+      <!-- Horizontal list with items that change page content when clicked -->
+      <ul id="pages">
+        <li id="left">About</li>
+        <li>Projects</li>
+        <li id="right">Image Gallery</li>
+      </ul>
+      <img id="selfie" src="images/selfie.jpg" alt="Selfie">
+      <div id="aboutme">
+        <p>Hey! My name is Brian Duarte and I am a Computer Science major at the University of California, Irvine.
+            Some of my hobbies include hiking, exercising, and playing video games.
+            I also always look forward to gaining new experiences. These include
+            eating foods from different cultures, traveling to new places, and
+            meeting new people.
+        </p>
+      </div>
       <p>Click here to get a random message:</p>
-      <button onclick="addRandomGreeting()">Hello</button>
-      <div id="greeting-container"></div>
+      <button onclick="addRandomfact()">Hello</button>
+      <div id="fact-container"></div>
     </div>
   </body>
 </html>
