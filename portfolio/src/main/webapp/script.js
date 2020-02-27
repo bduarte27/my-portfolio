@@ -12,6 +12,15 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
+/* 
+* Dynamically generate new html content when button is pressed
+*/
+async function getUsername() {
+    const response = await fetch('/data');
+    const welcome = await response.text();
+    document.getElementById('welcome-container').innerText = welcome;
+}
+
 /**
  * Adds a random fact to the page.
  */
