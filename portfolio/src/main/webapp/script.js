@@ -12,13 +12,28 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/* 
-* Dynamically generate new html content when button is pressed
-*/
-async function getUsername() {
-    const response = await fetch('/data');
-    const welcome = await response.text();
-    document.getElementById('welcome-container').innerText = welcome;
+/*
+ * Dynamically generate new html content when button is pressed
+ */
+async function getBlogComments() {
+  const response = await fetch('/data');
+  const blogData = await response.json();
+
+  const blogListElement = document.getElementById('blog-container');
+  addAllBlogComments(blogListElement, blogData);
+}
+
+function createListElement(text) {
+  const liElement = document.createElement('li');
+  liElement.innerText = text;
+  return liElement;
+}
+
+function addAllBlogComments(blogListElement, blogData) {
+  for (let i = 0; i < 5; i++) {
+    blogListElement.appendChild(
+        createListElement(blogData.commentsList[i].comment));
+  }
 }
 
 /**

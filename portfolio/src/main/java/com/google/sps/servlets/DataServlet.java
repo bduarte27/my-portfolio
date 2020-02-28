@@ -15,6 +15,8 @@
 package com.google.sps.servlets;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -22,10 +24,44 @@ import javax.servlet.http.HttpServletResponse;
 
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
-public class DataServlet extends HttpServlet {
+public final class DataServlet extends HttpServlet {
+  private List<String> commentsList;
+
+  @Override
+  public void init() {
+    commentsList = new ArrayList<String>();
+    for (int i = 0; i < 5; i++) {
+      String userComment = generateSampleComment(i);
+      commentsList.add(userComment);
+    }
+  }
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    response.setContentType("text/html;");
-    response.getWriter().println("Hello Brian Duarte!");
+    String blogData = convertListToJson();
+
+    response.setContentType("application/json;");
+    response.getWriter().println(blogData);
+  }
+
+  private String convertListToJson() {
+    String jsonList = "{";
+    jsonList += "\"commentsList\": ";
+    jsonList += commentsList;
+    jsonList += "}";
+    return jsonList;
+  }
+
+  private String generateSampleComment(int i) {
+    String comment = "{";
+    comment += "\"user\": ";
+    comment += i;
+
+    comment += ", ";
+
+    comment += "\"comment\": ";
+    comment += "\"Hi, I am user " + i + "\"";
+    comment += "}";
+    return comment;
   }
 }
