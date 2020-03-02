@@ -40,30 +40,30 @@ public final class DataServlet extends HttpServlet {
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-      // retrieve comment from the request and add to List
-      String comment = getUserComment(request);
-      saveComment(comment);
+    // retrieve comment from the request and add to List
+    String comment = getUserComment(request);
+    saveComment(comment);
 
-      commentsList.add(comment);
+    commentsList.add(comment);
 
-      // send user back to original page
-      response.sendRedirect("/index.html#blog-container");
+    // send user back to original page
+    response.sendRedirect("/index.html#blog-container");
   }
 
   private void saveComment(String comment) {
-      // Add comment to Datastore database
-      Entity commentEntity = new Entity("Comment");
-      commentEntity.setProperty("comment", comment);
-      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-      datastore.put(commentEntity);
+    // Add comment to Datastore database
+    Entity commentEntity = new Entity("Comment");
+    commentEntity.setProperty("comment", comment);
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(commentEntity);
   }
 
   private String getUserComment(HttpServletRequest request) {
-      // Retrieve comment and wrap in quotes so it can be read by JSON as String
-      String comment = "\"";
-      comment += request.getParameter("comment-input");
-      comment += "\"";
-      return comment;
+    // Retrieve comment and wrap in quotes so it can be read by JSON as String
+    String comment = "\"";
+    comment += request.getParameter("comment-input");
+    comment += "\"";
+    return comment;
   }
 
   private String convertListToJson() {

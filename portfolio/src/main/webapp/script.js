@@ -32,8 +32,7 @@ function createListElement(text) {
 function addAllBlogComments(blogListElement, blogData) {
   const listLength = blogData.commentsList.length;
   for (let i = 0; i < listLength; i++) {
-    blogListElement.appendChild(
-        createListElement(blogData.commentsList[i]));
+    blogListElement.appendChild(createListElement(blogData.commentsList[i]));
   }
 }
 
