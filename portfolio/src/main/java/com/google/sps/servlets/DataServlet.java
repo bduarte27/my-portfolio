@@ -17,6 +17,9 @@ package com.google.sps.servlets;
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.Query.SortDirection;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,12 +31,23 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
-  private List<String> commentsList = new ArrayList<String>();
-
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    String blogData = convertListToJson();
+    // Create query for all comments data
+    Query query = new Query("Comment");
 
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    PreparedQuery results = datastore.prepare(query);
+
+    // Gather all comments from query into List
+    List<String> commentsList = new ArrayList<String>();
+    for (Entity entity : results.asIterable()) {
+      String comment = (String) entity.getProperty("comment");
+      commentsList.add(comment);
+    }
+
+    // Convert List of comments to JSON style string object and send back
+    String blogData = convertListToJson(commentsList);
     response.setContentType("application/json;");
     response.getWriter().println(blogData);
   }
@@ -43,8 +57,6 @@ public final class DataServlet extends HttpServlet {
     // retrieve comment from the request and add to List
     String comment = getUserComment(request);
     saveComment(comment);
-
-    commentsList.add(comment);
 
     // send user back to original page
     response.sendRedirect("/index.html#blog-container");
@@ -66,7 +78,7 @@ public final class DataServlet extends HttpServlet {
     return comment;
   }
 
-  private String convertListToJson() {
+  private String convertListToJson(List<String> commentsList) {
     String jsonList = "{";
     jsonList += "\"commentsList\": ";
     jsonList += commentsList;
