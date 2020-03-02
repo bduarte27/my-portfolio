@@ -14,6 +14,9 @@
 
 package com.google.sps.servlets;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
+import com.google.appengine.api.datastore.Entity;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,10 +42,20 @@ public final class DataServlet extends HttpServlet {
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
       // retrieve comment from the request and add to List
       String comment = getUserComment(request);
+      saveComment(comment);
+
       commentsList.add(comment);
 
       // send user back to original page
       response.sendRedirect("/index.html#blog-container");
+  }
+
+  private void saveComment(String comment) {
+      // Add comment to Datastore database
+      Entity commentEntity = new Entity("Comment");
+      commentEntity.setProperty("comment", comment);
+      DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+      datastore.put(commentEntity);
   }
 
   private String getUserComment(HttpServletRequest request) {
