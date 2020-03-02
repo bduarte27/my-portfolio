@@ -25,16 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 /** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
-  private List<String> commentsList;
-
-  @Override
-  public void init() {
-    commentsList = new ArrayList<String>();
-    for (int i = 0; i < 5; i++) {
-      String userComment = generateSampleComment(i);
-      commentsList.add(userComment);
-    }
-  }
+  private List<String> commentsList = new ArrayList<String>();
 
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -44,24 +35,29 @@ public final class DataServlet extends HttpServlet {
     response.getWriter().println(blogData);
   }
 
+  @Override
+  public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
+      // retrieve comment from the request and add to List
+      String comment = getUserComment(request);
+      commentsList.add(comment);
+
+      // send user back to original page
+      response.sendRedirect("/index.html#blog-container");
+  }
+
+  private String getUserComment(HttpServletRequest request) {
+      // Retrieve comment and wrap in quotes so it can be read by JSON as String
+      String comment = "\"";
+      comment += request.getParameter("comment-input");
+      comment += "\"";
+      return comment;
+  }
+
   private String convertListToJson() {
     String jsonList = "{";
     jsonList += "\"commentsList\": ";
     jsonList += commentsList;
     jsonList += "}";
     return jsonList;
-  }
-
-  private String generateSampleComment(int i) {
-    String comment = "{";
-    comment += "\"user\": ";
-    comment += i;
-
-    comment += ", ";
-
-    comment += "\"comment\": ";
-    comment += "\"Hi, I am user " + i + "\"";
-    comment += "}";
-    return comment;
   }
 }
