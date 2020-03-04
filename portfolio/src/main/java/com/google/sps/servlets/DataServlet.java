@@ -20,6 +20,8 @@ import com.google.appengine.api.datastore.Entity;
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
+import com.google.gson.Gson;
+import com.google.sps.data.CommentsData;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -28,61 +30,69 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-/** Servlet that returns some example content. TODO: modify this file to handle comments data */
 @WebServlet("/data")
 public final class DataServlet extends HttpServlet {
+  private static final String COMMENT_ENTITY = "Comment";
+  private static final String COMMENT_PROPERTY = "comment";
+
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // Create query for all comments data
-    Query query = new Query("Comment");
-
-    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    PreparedQuery results = datastore.prepare(query);
-
-    // Gather all comments from query into List
-    List<String> commentsList = new ArrayList<String>();
-    for (Entity entity : results.asIterable()) {
-      String comment = (String) entity.getProperty("comment");
-      commentsList.add(comment);
-    }
-
-    // Convert List of comments to JSON style string object and send back
-    String blogData = convertListToJson(commentsList);
-    response.setContentType("application/json;");
-    response.getWriter().println(blogData);
+    sendJsonResponse(
+        response, convertListToJson(fetchAllCommentsAsList(createQueryToFetchAllComments())));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    // retrieve comment from the request and add to List
-    String comment = getUserComment(request);
-    saveComment(comment);
-
-    // send user back to original page
+    addCommentToDatastore(getUserComment(request));
     response.sendRedirect("/index.html#blog-container");
   }
 
-  private void saveComment(String comment) {
-    // Add comment to Datastore database
-    Entity commentEntity = new Entity("Comment");
-    commentEntity.setProperty("comment", comment);
+  private Query createQueryToFetchAllComments() {
+    return new Query(COMMENT_ENTITY);
+  }
+
+  private List<String> fetchAllCommentsAsList(Query query) {
+    PreparedQuery commentEntities = fetchQuery(query);
+    List<String> commentsList = new ArrayList<String>();
+
+    for (Entity commentEntity : commentEntities.asIterable()) {
+      String comment = (String) commentEntity.getProperty(COMMENT_PROPERTY);
+      commentsList.add(comment);
+    }
+    return commentsList;
+  }
+
+  private PreparedQuery fetchQuery(Query query) {
     DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-    datastore.put(commentEntity);
+    return datastore.prepare(query);
+  }
+
+  private void sendJsonResponse(HttpServletResponse response, String json) throws IOException {
+    response.setContentType("application/json;");
+    response.getWriter().println(json);
   }
 
   private String getUserComment(HttpServletRequest request) {
-    // Retrieve comment and wrap in quotes so it can be read by JSON as String
-    String comment = "\"";
-    comment += request.getParameter("comment-input");
-    comment += "\"";
-    return comment;
+    return request.getParameter("comment-input");
+  }
+
+  private void addCommentToDatastore(String comment) {
+    addEntityToDatastore(createCommentEntity(comment));
+  }
+
+  private Entity createCommentEntity(String comment) {
+    Entity commentEntity = new Entity(COMMENT_ENTITY);
+    commentEntity.setProperty(COMMENT_PROPERTY, comment);
+    return commentEntity;
+  }
+
+  private void addEntityToDatastore(Entity entity) {
+    DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+    datastore.put(entity);
   }
 
   private String convertListToJson(List<String> commentsList) {
-    String jsonList = "{";
-    jsonList += "\"commentsList\": ";
-    jsonList += commentsList;
-    jsonList += "}";
-    return jsonList;
+    CommentsData commentsData = new CommentsData(commentsList);
+    return new Gson().toJson(commentsData);
   }
 }
