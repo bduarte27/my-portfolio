@@ -24,7 +24,7 @@ function addDefaultCommentText() {
 }
 
 async function loadAllPost() {
-  const response = await fetch('/data');
+  const response = await fetch('/comment');
   const comments = await response.json();
   addAllPostToBlog(comments);
 }
@@ -76,7 +76,7 @@ function addCommentText(commentContainer, elementType, content) {
 function addComment(clickSubmitEvent) {
   clickSubmitEvent.preventDefault();
 
-  fetch('/data', {
+  fetch('/comment', {
     method: 'post',
     body: new URLSearchParams(
         new FormData(document.getElementById('comment-form')))
@@ -89,7 +89,22 @@ function resetForm() {
   document.getElementById('comment-form').reset();
 }
 
+async function showCommentFormIfLoggedIn() {
+  const response = await fetch('/authentication');
+  const authenticationInfo = await response.json();
+  if (authenticationInfo.isLoggedIn) {
+    resetForm();
+  } else {
+    hideCommentForm();
+  }
+}
+
+function hideCommentForm() {
+  document.getElementById('comment-form').style.display = 'none';
+}
+
 document.addEventListener('DOMContentLoaded', () => {
+  showCommentFormIfLoggedIn()
   loadAllPost();
 
   document.getElementById('comment-input')

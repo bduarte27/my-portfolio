@@ -1,4 +1,4 @@
-package com.google.sps.data;
+package com.google.sps.data.comment;
 
 import com.google.appengine.api.datastore.Entity;
 import com.google.gson.annotations.Expose;
