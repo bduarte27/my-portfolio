@@ -6,7 +6,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="script.js"></script>
   </head>
-  <body onload="getBlogComments()">
+  <body>
     <!-- intro section describes upper half of the page which is just the wallpaper with my name -->
     <div id="intro">
 
@@ -58,12 +58,15 @@
             meeting new people.
         </p>
       </div>
-      <div id="blog-container"></div>
-      <form action="/data" method="POST">
-        <textarea name="comment-input">comment here</textarea>
+      <div id="form-alignment-filler"></div>
+      <form action="" method="POST" id="comment-form">
+        <input id="author-input" type="text" name="author" value="Anonymous" required>
         <br>
-        <input type="submit">
+        <textarea id="comment-input" name="comment" required>Add a comment...</textarea>
+        <br>
+        <input type="submit" id="comment-form-submit" value="Post">
       </form>
+      <div id="blog-container"></div>
     </div>
   </body>
 </html>
