@@ -2,6 +2,7 @@ package com.google.sps.data.authentication;
 
 import com.google.appengine.api.users.UserService;
 import com.google.appengine.api.users.UserServiceFactory;
+import com.google.gson.Gson;
 import java.io.IOException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -11,10 +12,6 @@ public class AuthenticationService {
   private static final String LOGIN_STATUS_PARAMETER = "login-status";
 
   private AuthenticationService() {}
-
-  public static boolean loginStatus() {
-    return UserServiceFactory.getUserService().isUserLoggedIn();
-  }
 
   public static void updateLoginStatus(HttpServletRequest request, HttpServletResponse response)
       throws IOException {
@@ -26,11 +23,14 @@ public class AuthenticationService {
     }
   }
 
-  public static String createJsonLoginStatusString() {
-    String json = "{";
-    json += "\"isLoggedIn\": " + AuthenticationService.loginStatus();
-    json += "}";
-    return json;
+  public static String createJsonAuthenticationString() {
+    UserService userService = UserServiceFactory.getUserService();
+    String email = "";
+    if (userService.isUserLoggedIn()) {
+      email = userService.getCurrentUser().getEmail();
+    }
+    Authentication userAuthentication = new Authentication(userService.isUserLoggedIn(), email);
+    return new Gson().toJson(userAuthentication);
   }
 
   private static void userLogin(HttpServletResponse response) throws IOException {

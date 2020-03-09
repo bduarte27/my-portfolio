@@ -8,7 +8,7 @@ class Servlets {
 
   public static void sendJsonResponse(HttpServletResponse response, String json)
       throws IOException {
-    response.setContentType("application/json");
+    response.setContentType("application/json;");
     response.getWriter().println(json);
   }
 }

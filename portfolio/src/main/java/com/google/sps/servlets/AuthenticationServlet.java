@@ -13,7 +13,7 @@ import javax.servlet.http.HttpServletResponse;
 public final class AuthenticationServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    Servlets.sendJsonResponse(response, AuthenticationService.createJsonLoginStatusString());
+    Servlets.sendJsonResponse(response, AuthenticationService.createJsonAuthenticationString());
   }
 
   @Override

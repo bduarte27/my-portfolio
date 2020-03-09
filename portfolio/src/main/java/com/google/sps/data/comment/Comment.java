@@ -1,6 +1,8 @@
 package com.google.sps.data.comment;
 
 import com.google.appengine.api.datastore.Entity;
+import com.google.appengine.api.users.UserService;
+import com.google.appengine.api.users.UserServiceFactory;
 import com.google.gson.annotations.Expose;
 import javax.servlet.http.HttpServletRequest;
 
@@ -27,7 +29,8 @@ public class Comment {
   }
 
   public static Comment fromServletRequest(HttpServletRequest request) {
-    return new Comment(request.getParameter(AUTHOR_PROPERTY),
+    UserService userService = UserServiceFactory.getUserService();
+    return new Comment(userService.getCurrentUser().getEmail(),
         request.getParameter(COMMENT_PROPERTY), System.currentTimeMillis());
   }
 

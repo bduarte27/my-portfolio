@@ -41,7 +41,7 @@ function addAllPostToBlog(comments) {
 
 function addPostToBlog() {
   const blogContainer = document.getElementById('blog-container');
-  const author = document.getElementById('author-input').value;
+  const author = emailAddress;
   const comment = document.getElementById('comment-input').value;
   blogContainer.prepend(createPost(author, comment));
 }
@@ -94,6 +94,7 @@ async function showCommentFormIfLoggedIn() {
   const authenticationInfo = await response.json();
   if (authenticationInfo.isLoggedIn) {
     resetForm();
+    emailAddress = authenticationInfo.emailAddress;
   } else {
     hideCommentForm();
   }
@@ -103,8 +104,13 @@ function hideCommentForm() {
   document.getElementById('comment-form').style.display = 'none';
 }
 
+// Need global email for addPostToBlog -> to avoid making another fetch request
+// assigned in showCommentFormIfLoggedIn
+// Unsure if this is the right way to go about it though
+let emailAddress = '';
+
 document.addEventListener('DOMContentLoaded', () => {
-  showCommentFormIfLoggedIn()
+  showCommentFormIfLoggedIn();
   loadAllPost();
 
   document.getElementById('comment-input')
