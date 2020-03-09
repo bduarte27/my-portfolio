@@ -14,8 +14,8 @@
 
 package com.google.sps.servlets;
 
-import com.google.sps.data.Comment;
-import com.google.sps.data.CommentService;
+import com.google.sps.data.comment.Comment;
+import com.google.sps.data.comment.CommentService;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -24,20 +24,15 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-@WebServlet("/data")
-public final class DataServlet extends HttpServlet {
+@WebServlet("/comment")
+public final class CommentServlet extends HttpServlet {
   @Override
   public void doGet(HttpServletRequest request, HttpServletResponse response) throws IOException {
-    sendJsonResponse(response, CommentService.toJson(CommentService.fetchAllAsList()));
+    Servlets.sendJsonResponse(response, CommentService.toJson(CommentService.fetchAllAsList()));
   }
 
   @Override
   public void doPost(HttpServletRequest request, HttpServletResponse response) throws IOException {
     CommentService.add(Comment.fromServletRequest(request));
-  }
-
-  private void sendJsonResponse(HttpServletResponse response, String json) throws IOException {
-    response.setContentType("application/json;");
-    response.getWriter().println(json);
   }
 }

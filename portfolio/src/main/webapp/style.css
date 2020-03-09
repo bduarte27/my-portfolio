@@ -200,5 +200,13 @@ COMMENT AREA
 }
 
 /*
+AUTHENTICATION FORM
+*/
+.authentication-form {
+    display: inline-block;
+    margin: 3px;
+}
+
+/*
 END LOWER HALF OF PAGE
 */

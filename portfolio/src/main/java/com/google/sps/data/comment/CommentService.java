@@ -1,4 +1,4 @@
-package com.google.sps.data;
+package com.google.sps.data.comment;
 
 import com.google.appengine.api.datastore.DatastoreService;
 import com.google.appengine.api.datastore.DatastoreServiceFactory;
@@ -8,7 +8,7 @@ import com.google.appengine.api.datastore.Query;
 import com.google.appengine.api.datastore.Query.SortDirection;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
-import com.google.sps.data.Comment;
+import com.google.sps.data.comment.Comment;
 import java.util.ArrayList;
 import java.util.List;
 
