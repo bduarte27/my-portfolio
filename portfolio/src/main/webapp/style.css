@@ -131,5 +131,74 @@ LOWER HALF OF PAGE
 }
 
 /*
+COMMENT AREA
+*/
+#form-alignment-filler {
+  display: inline-block;
+  width: 50px;
+}
+
+#comment-form {
+    display: inline-block;
+    margin: 15px auto;
+}
+
+#comment-input {
+    border-radius: 6px;
+    color: rgba(0, 0, 0, 0.5);
+    height: 80px;
+    padding: 4px;
+    margin: 5px 0;
+    width: 250px;
+    resize: none;
+}
+
+#comment-form-submit {
+    background-color: #228dd9;
+    border: none;
+    border-radius: 4px;
+    width: 250px;
+    height: 35px;
+}
+
+#blog-container {
+    margin: auto;
+}
+
+#blog-container div {
+    margin: 8px;
+}
+
+.user-comment {
+    background: rgba(206, 204, 200, 0.5);
+    border-radius: 6px;
+    display: inline-block;
+    height: 80px;
+    width: 250px;
+    padding: 10px;
+}
+
+#blog-container img {
+  border-radius: 50%;
+  display: inline-block;
+  margin: 8px 5px 0 0;
+  height: 50px;
+  width: 50px;
+  vertical-align: top;
+}
+
+#blog-container h3 {
+    font-size: 15px;
+    margin: 0 0 5px 0;
+    text-align: left;
+}
+
+#blog-container p {
+    font-size: 12px;
+    margin: 0;
+    text-align: left;
+}
+
+/*
 END LOWER HALF OF PAGE
 */

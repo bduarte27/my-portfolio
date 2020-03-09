@@ -12,43 +12,90 @@
 // See the License for the specific language governing permissions and
 // limitations under the License.
 
-/*
- * Dynamically generate new html content when button is pressed
- */
-async function getBlogComments() {
+function removeDefaultCommentText() {
+  commentInput = document.getElementById('comment-input');
+  commentInput.innerText = '';
+  commentInput.style.color = 'rgba(0, 0, 0)';
+}
+
+function addDefaultCommentText() {
+  document.getElementById('comment-input').innerText = 'Add a comment...';
+  commentInput.style.color = 'rgba(0, 0, 0, .5)';
+}
+
+async function loadAllPost() {
   const response = await fetch('/data');
-  const blogData = await response.json();
-
-  const blogListElement = document.getElementById('blog-container');
-  addAllBlogComments(blogListElement, blogData);
+  const comments = await response.json();
+  addAllPostToBlog(comments);
 }
 
-function createListElement(text) {
-  const liElement = document.createElement('li');
-  liElement.innerText = text;
-  return liElement;
-}
+function addAllPostToBlog(comments) {
+  const blogContainer = document.getElementById('blog-container');
 
-function addAllBlogComments(blogListElement, blogData) {
-  const listLength = blogData.commentsList.length;
-  for (let i = 0; i < listLength; i++) {
-    blogListElement.appendChild(createListElement(blogData.commentsList[i]));
+  // comments sorted by most recently posted to resemble a blog
+  for (const commentObject of comments) {
+    blogContainer.append(
+        createPost(commentObject.author, commentObject.comment));
   }
 }
 
-/**
- * Adds a random fact to the page.
- */
-function addRandomfact() {
-  const personalFact = [
-    'Samoyed is my favorite dog breed', 'Horchata is my favorite drink',
-    'I enjoy running', 'Maplestory is my favorite childhood game'
-  ];
-
-  // Pick a random fact.
-  const fact = personalFact[Math.floor(Math.random() * personalFact.length)];
-
-  // Add it to the page.
-  const factContainer = document.getElementById('fact-container');
-  factContainer.innerText = fact;
+function addPostToBlog() {
+  const blogContainer = document.getElementById('blog-container');
+  const author = document.getElementById('author-input').value;
+  const comment = document.getElementById('comment-input').value;
+  blogContainer.prepend(createPost(author, comment));
 }
+
+function createPost(author, comment) {
+  const postContainer = document.createElement('div');
+  postContainer.append(createPostUserImage());
+  postContainer.append(createPostComment(author, comment));
+  return postContainer;
+}
+
+function createPostUserImage() {
+  const userImage = document.createElement('img');
+  userImage.src = 'images/anonymous.png';
+  return userImage;
+}
+
+function createPostComment(author, comment) {
+  const commentContainer = document.createElement('div');
+  commentContainer.className = 'user-comment';
+  addCommentText(commentContainer, 'h3', author);
+  addCommentText(commentContainer, 'p', comment);
+  return commentContainer;
+}
+
+function addCommentText(commentContainer, elementType, content) {
+  const element = document.createElement(elementType);
+  element.innerText = content;
+  commentContainer.append(element);
+}
+
+function addComment(clickSubmitEvent) {
+  clickSubmitEvent.preventDefault();
+
+  fetch('/data', {
+    method: 'post',
+    body: new URLSearchParams(
+        new FormData(document.getElementById('comment-form')))
+  })
+      .then(addPostToBlog)
+      .then(resetForm);
+}
+
+function resetForm() {
+  document.getElementById('comment-form').reset();
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  loadAllPost();
+
+  document.getElementById('comment-input')
+      .addEventListener('focus', removeDefaultCommentText);
+  document.getElementById('comment-input')
+      .addEventListener('blur', addDefaultCommentText);
+  document.getElementById('comment-form-submit')
+      .addEventListener('click', addComment);
+});
